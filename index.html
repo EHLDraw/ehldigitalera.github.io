@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DiabetesTracker — Simple. Private. Yours.</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --orange: #FF6B35;
+  --purple: #7B2FBE;
+  --gradient: linear-gradient(135deg, #FF6B35 0%, #7B2FBE 100%);
+  --text: #1A1A2E;
+  --text-soft: #6B7280;
+  --bg-alt: #F8F6FF;
+  --white: #FFFFFF;
+  --radius: 20px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  background: var(--white);
+  overflow-x: hidden;
+}
+
+/* ── NAVBAR ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.nav-logo {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.nav-cta {
+  background: var(--gradient);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 20px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  top: -200px; right: -200px;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+  bottom: -100px; left: -100px;
+}
+.hero-content { position: relative; z-index: 1; max-width: 720px; }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50px;
+  padding: 8px 18px;
+  font-size: 13px;
+  color: white;
+  margin-bottom: 28px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+.hero-badge span { font-size: 16px; }
+.hero h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(36px, 6vw, 58px);
+  font-weight: 800;
+  color: white;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+.hero h1 em {
+  font-style: normal;
+  background: rgba(255,255,255,0.25);
+  border-radius: 8px;
+  padding: 2px 12px;
+}
+.hero p {
+  font-size: clamp(16px, 2.5vw, 20px);
+  color: rgba(255,255,255,0.88);
+  line-height: 1.65;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+.hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn-primary-hero {
+  background: white;
+  color: var(--purple);
+  border: none;
+  border-radius: 50px;
+  padding: 16px 36px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+.btn-primary-hero:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.2); }
+.btn-secondary-hero {
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: white;
+  border-radius: 50px;
+  padding: 16px 36px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-secondary-hero:hover { background: rgba(255,255,255,0.25); }
+.hero-trust {
+  margin-top: 28px;
+  color: rgba(255,255,255,0.65);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.hero-trust span { display: flex; align-items: center; gap: 5px; }
+
+/* Wave separator */
+.wave {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  margin-top: -2px;
+}
+.wave svg { display: block; }
+
+/* ── FEATURES ── */
+.features {
+  padding: 90px 20px;
+  background: var(--white);
+}
+.section-label {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+}
+.section-title {
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 14px;
+  letter-spacing: -0.02em;
+}
+.section-sub {
+  text-align: center;
+  font-size: 17px;
+  color: var(--text-soft);
+  max-width: 540px;
+  margin: 0 auto 60px;
+  line-height: 1.65;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+.feature-card {
+  background: var(--white);
+  border: 1px solid #F0EBF8;
+  border-radius: var(--radius);
+  padding: 36px 30px;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gradient);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(123,47,190,0.1);
+  border-color: rgba(123,47,190,0.15);
+}
+.feature-card:hover::before { opacity: 1; }
+.feature-icon {
+  width: 60px; height: 60px;
+  border-radius: 16px;
+  background: var(--gradient);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  margin-bottom: 22px;
+}
+.feature-card h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.feature-card p {
+  font-size: 15px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+
+/* ── HOW IT WORKS ── */
+.how {
+  padding: 90px 20px;
+  background: var(--bg-alt);
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 32px;
+  max-width: 960px;
+  margin: 0 auto;
+  position: relative;
+}
+.step {
+  text-align: center;
+  padding: 20px;
+}
+.step-num {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--gradient);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 24px rgba(123,47,190,0.25);
+}
+.step h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.step p {
+  font-size: 15px;
+  color: var(--text-soft);
+  line-height: 1.65;
+}
+
+/* ── PRIVACY CALLOUT ── */
+.privacy {
+  padding: 70px 20px;
+  background: var(--white);
+}
+.privacy-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #FFF5F0, #F5F0FF);
+  border: 1px solid rgba(123,47,190,0.1);
+  border-radius: 24px;
+  padding: 50px 50px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.privacy-icon {
+  font-size: 64px;
+  flex-shrink: 0;
+}
+.privacy-text h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+.privacy-text p {
+  font-size: 16px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.privacy-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.pill {
+  background: white;
+  border: 1px solid rgba(123,47,190,0.15);
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--purple);
+}
+
+/* ── CTA SECTION ── */
+.cta {
+  padding: 100px 20px;
+  background: var(--gradient);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta::before {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  top: -200px; left: -100px;
+}
+.cta-content { position: relative; z-index: 1; }
+.cta h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(30px, 5vw, 48px);
+  font-weight: 800;
+  color: white;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+.cta p {
+  font-size: 18px;
+  color: rgba(255,255,255,0.82);
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+.google-play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  color: var(--text);
+  border-radius: 14px;
+  padding: 14px 28px;
+  font-family: 'Inter', sans-serif;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.google-play-btn:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,0.25); }
+.gp-icon { font-size: 32px; }
+.gp-text { text-align: left; }
+.gp-text small { display: block; font-size: 11px; color: #666; font-weight: 400; }
+.gp-text strong { display: block; font-size: 18px; font-weight: 700; color: var(--text); }
+.cta-sub {
+  margin-top: 20px;
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: #0F0A1E;
+  color: rgba(255,255,255,0.6);
+  padding: 40px 20px;
+  text-align: center;
+}
+.footer-logo {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: white; }
+footer p { font-size: 12px; color: rgba(255,255,255,0.35); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  nav { padding: 14px 20px; }
+  .privacy-card { flex-direction: column; padding: 36px 24px; text-align: center; }
+  .privacy-pills { justify-content: center; }
+  .hero-btns { flex-direction: column; align-items: center; }
+  .btn-primary-hero, .btn-secondary-hero { width: 100%; max-width: 320px; justify-content: center; }
+}
+
+/* ── SCROLL ANIMATIONS ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-logo">💉 DiabetesTracker</div>
+  <a href="#download" class="nav-cta">Download Free</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge"><span>🩺</span> Free Android App — No Account Needed</div>
+    <h1>Track Your Diabetes.<br><em>Simply & Privately.</em></h1>
+    <p>Log blood sugar and insulin levels every day in seconds. Your health data stays on your phone — no cloud, no subscriptions, no sharing. Ever.</p>
+    <div class="hero-btns">
+      <a href="#download" class="btn-primary-hero">
+        <span>▶</span> Download Free on Google Play
+      </a>
+      <a href="#features" class="btn-secondary-hero">See How It Works</a>
+    </div>
+    <div class="hero-trust">
+      <span>✓ 100% Free</span>
+      <span>✓ Works Offline</span>
+      <span>✓ No Sign-Up</span>
+      <span>✓ Private by Design</span>
+    </div>
+  </div>
+</section>
+
+<!-- WAVE -->
+<div class="wave">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none" style="height:80px;width:100%;">
+    <path fill="#ffffff" d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z"/>
+  </svg>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-label">Core Features</div>
+  <h2 class="section-title">Everything You Need.<br>Nothing You Don't.</h2>
+  <p class="section-sub">DiabetesTracker keeps it simple so you'll actually use it every day — not just when you remember.</p>
+
+  <div class="features-grid">
+    <div class="feature-card fade-up">
+      <div class="feature-icon">💉</div>
+      <h3>Track Blood Sugar & Insulin</h3>
+      <p>Log glucose readings and insulin doses with customizable test times — Fasting, After Meal, Bedtime, Random and more.</p>
+    </div>
+    <div class="feature-card fade-up" style="transition-delay:0.1s">
+      <div class="feature-icon">📊</div>
+      <h3>See Your Trends</h3>
+      <p>Daily summaries and trend charts help you and your doctor understand your patterns over time at a glance.</p>
+    </div>
+    <div class="feature-card fade-up" style="transition-delay:0.2s">
+      <div class="feature-icon">🔒</div>
+      <h3>100% Private & Offline</h3>
+      <p>All your health data stays on your device. No cloud. No account needed. No data sharing. Your phone, your data.</p>
+    </div>
+    <div class="feature-card fade-up" style="transition-delay:0.3s">
+      <div class="feature-icon">🎯</div>
+      <h3>Smart Target Ranges</h3>
+      <p>Set personalized targets for Fasting, After Meal, and Bedtime readings. Get instant alerts when levels go out of range.</p>
+    </div>
+    <div class="feature-card fade-up" style="transition-delay:0.4s">
+      <div class="feature-icon">📤</div>
+      <h3>Export for Your Doctor</h3>
+      <p>Share your reading history with your healthcare provider in one tap. Easy exports when you need them.</p>
+    </div>
+    <div class="feature-card fade-up" style="transition-delay:0.5s">
+      <div class="feature-icon">⚡</div>
+      <h3>Built for Daily Use</h3>
+      <p>Designed to be fast and frictionless. Log a reading in under 10 seconds so tracking never feels like a chore.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-label">Simple Process</div>
+  <h2 class="section-title">How It Works</h2>
+  <p class="section-sub">Three steps. That's all it takes to start managing your diabetes better every day.</p>
+
+  <div class="steps">
+    <div class="step fade-up">
+      <div class="step-num">1</div>
+      <h3>Record Your Reading</h3>
+      <p>Enter your blood sugar level, insulin dose, and test time in seconds. No typing required — just tap and save.</p>
+    </div>
+    <div class="step fade-up" style="transition-delay:0.15s">
+      <div class="step-num">2</div>
+      <h3>View Your Summary</h3>
+      <p>See today's averages, total insulin, recent readings, and how your levels compare to your personal targets.</p>
+    </div>
+    <div class="step fade-up" style="transition-delay:0.3s">
+      <div class="step-num">3</div>
+      <h3>Export & Share</h3>
+      <p>Share your full reading history with your doctor or healthcare team anytime — with one tap.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY CALLOUT -->
+<section class="privacy">
+  <div class="privacy-card fade-up">
+    <div class="privacy-icon">🛡️</div>
+    <div class="privacy-text">
+      <h3>Your Health Data Is Yours. Period.</h3>
+      <p>We built DiabetesTracker with one rule: your health information never leaves your phone. No servers, no accounts, no ads, no selling your data. What you track stays with you.</p>
+      <div class="privacy-pills">
+        <span class="pill">No Cloud Storage</span>
+        <span class="pill">No Account Required</span>
+        <span class="pill">No Ads</span>
+        <span class="pill">No Data Sharing</span>
+        <span class="pill">Works Offline</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="download">
+  <div class="cta-content">
+    <h2>Start Tracking Today.<br>It's Completely Free.</h2>
+    <p>Available on Android. No sign-up. No credit card. Just download and start.</p>
+    <a href="https://play.google.com/store" class="google-play-btn">
+      <div class="gp-icon">▶</div>
+      <div class="gp-text">
+        <small>GET IT ON</small>
+        <strong>Google Play</strong>
+      </div>
+    </a>
+    <p class="cta-sub">Free forever · Works offline · Android 6.0+</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">DiabetesTracker</div>
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="#how">How It Works</a>
+    <a href="https://ehldraw.github.io/ehldigitalera.github.io/privacy-policy.html" target="_blank">Privacy Policy</a>
+    <a href="mailto:support@enhancehappylife.com">Contact</a>
+  </div>
+  <p>© 2026 EHL Digital Era — Enhance Happy Life. All rights reserved.</p>
+</footer>
+
+<script>
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
